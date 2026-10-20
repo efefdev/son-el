@@ -55,3 +55,11 @@ import('/test/qa.js').then(m => m.start({ runs: 3, speed: 8 }))
 
 Bot oyunu kendi kendine oynar; her adımda kart/mermi/etiket/düğme tutarlılığını denetler.
 Sonuçlar `__qa.Q` içinde (`errs`, `warns`, `runs`, `log`).
+
+## Yayınlama
+
+Site GitHub Pages'ten yayınlanır. JS/CSS dosyaları CDN'de saatlerce önbellekte kalabildiği için her yayından önce sürüm etiketini yenileyin:
+
+```bash
+./scripts/surum.sh && git commit -am "Yeni sürüm" && git push
+```
