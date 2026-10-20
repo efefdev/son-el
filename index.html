@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#050404">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Son El</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body class="loading">
+
+<canvas id="c"></canvas>
+
+<div id="loader"><div class="ld-title">SON EL</div><div class="ld-bar"><i></i></div><div class="ld-txt">Masa hazırlanıyor…</div></div>
+
+<!-- BAŞLIK -->
+<section id="title" class="overlay">
+  <h1 class="logo">SON EL</h1>
+  <p class="subtitle">Blackjack. Kaybeden tetiği çeker.</p>
+  <div class="title-btns">
+    <button class="chipbtn red" id="btn-new"><span>Masaya<br>Otur</span></button>
+    <button class="chipbtn black" id="btn-how"><span>Kurallar</span></button>
+  </div>
+  <p class="record" id="record"></p>
+  <p class="hint">Kulaklıkla oynayın.</p>
+</section>
+
+<!-- OYUN ARAYÜZÜ -->
+<section id="hud" class="overlay">
+  <header class="hud-top">
+    <div class="tableno"><span class="lbl">Masa</span><b id="h-table">1</b><small>/7</small></div>
+    <div class="opp-head">
+      <div class="opp-name" id="o-name"></div>
+      <div class="opp-quirk" id="o-quirk"></div>
+      <div class="opp-cyl"><div class="mini-cyl" id="o-cyl"></div><span class="odds" id="o-odds"></span></div>
+    </div>
+    <div class="hud-btns">
+      <button class="tbtn" id="btn-help">Kurallar</button>
+      <button class="tbtn" id="btn-speed">Hız ×1</button>
+      <button class="tbtn" id="btn-sound">Ses: Açık</button>
+      <button class="tbtn" id="btn-quit">Kalk</button>
+      <button class="tbtn menu" id="btn-menu" aria-label="Menü">☰</button>
+    </div>
+  </header>
+  <div class="subtitle-line" id="say"></div>
+  <div class="tlabel" id="lbl-a"></div>
+  <div class="tlabel" id="lbl-p"></div>
+  <div class="msg" id="msg"></div>
+
+  <footer class="hud-bottom">
+    <div class="my-cyl">
+      <span class="lbl">Senin silindirin</span>
+      <div class="cylrow"><div class="mini-cyl big" id="p-cyl"></div><span class="odds" id="p-odds"></span></div>
+      <div class="passes" id="p-pass"></div>
+    </div>
+    <button class="eyebtn" id="btn-lean" aria-label="Yakından bak"><span>👁</span><small>Yakından</small></button>
+    <div class="actions" id="actions">
+      <button class="chipbtn green" id="btn-hit"><span>Kart<br>Çek</span><kbd>H</kbd></button>
+      <button class="chipbtn red" id="btn-stand"><span>Dur</span><kbd>S</kbd></button>
+      <button class="chipbtn gold" id="btn-double"><span>İkiye<br>Katla</span><kbd>D</kbd></button>
+    </div>
+    <div class="turn-info" id="turn-info"></div>
+  </footer>
+
+  <div class="pull" id="pull">
+    <div class="pull-who" id="pull-who"></div>
+    <div class="pull-odds" id="pull-odds"></div>
+    <div class="pull-btns" id="pull-btns"></div>
+  </div>
+  <div class="bigword" id="bigword"></div>
+  <div class="tipbox" id="tipbox"></div>
+</section>
+
+<div id="modal-root"></div>
+
+<script src="js/rules.js"></script>
+<script src="js/audio.js"></script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
