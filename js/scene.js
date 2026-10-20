@@ -10,7 +10,7 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 
 export const TABLE_Y = 0.78;
 const CARD_W = 0.11, CARD_H = 0.154, CARD_T = 0.0016;
-const rnd = (a, b) => a + Math.random() * (b - a);
+const rnd = (a, b) => a + secureRandom() * (b - a);
 
 // ================= YARDIMCILAR =================
 const ease = {
@@ -33,8 +33,8 @@ function canvasTex(w, h, draw, opts = {}) {
 function speckle(g, w, h, n, color, rmax = 1.5, alpha = 0.08) {
   g.fillStyle = color;
   for (let i = 0; i < n; i++) {
-    g.globalAlpha = Math.random() * alpha;
-    g.beginPath(); g.arc(Math.random() * w, Math.random() * h, Math.random() * rmax, 0, 7); g.fill();
+    g.globalAlpha = secureRandom() * alpha;
+    g.beginPath(); g.arc(secureRandom() * w, secureRandom() * h, secureRandom() * rmax, 0, 7); g.fill();
   }
   g.globalAlpha = 1;
 }
@@ -84,7 +84,7 @@ function woodTexture(repeat = [1, 1], tone = 1) {
   return canvasTex(1024, 256, (g, w, h) => {
     g.fillStyle = `rgb(${70 * tone},${40 * tone},${20 * tone})`; g.fillRect(0, 0, w, h);
     for (let i = 0; i < 140; i++) {
-      const y = Math.random() * h;
+      const y = secureRandom() * h;
       g.strokeStyle = `rgba(${rnd(10, 40)},${rnd(5, 20)},0,${rnd(0.1, 0.5)})`; g.lineWidth = rnd(0.5, 3);
       g.beginPath(); g.moveTo(0, y);
       for (let x = 0; x <= w; x += 32) g.lineTo(x, y + Math.sin(x * 0.01 + i) * rnd(1, 5));
@@ -104,7 +104,7 @@ function concreteTexture(repeat, bricks) {
     speckle(g, w, h, 70000, '#000', 2, 0.25);
     speckle(g, w, h, 20000, '#9a948a', 1.5, 0.12);
     for (let i = 0; i < 40; i++) {
-      const x = Math.random() * w, y = Math.random() * h;
+      const x = secureRandom() * w, y = secureRandom() * h;
       const s = g.createRadialGradient(x, y, 0, x, y, rnd(40, 160));
       s.addColorStop(0, `rgba(0,0,0,${rnd(0.1, 0.35)})`); s.addColorStop(1, 'rgba(0,0,0,0)');
       g.fillStyle = s; g.fillRect(0, 0, w, h);
@@ -119,7 +119,7 @@ function concreteTexture(repeat, bricks) {
     }
     // su lekeleri (aşağı akan)
     for (let i = 0; i < 12; i++) {
-      const x = Math.random() * w;
+      const x = secureRandom() * w;
       const s = g.createLinearGradient(0, 0, 0, h);
       s.addColorStop(0, 'rgba(10,8,5,.35)'); s.addColorStop(1, 'rgba(10,8,5,0)');
       g.fillStyle = s; g.fillRect(x, 0, rnd(8, 40), h * rnd(0.3, 0.9));
@@ -339,8 +339,8 @@ function linenBump() {
   linenTex = canvasTex(256, 256, (g, w, h) => {
     g.fillStyle = '#808080'; g.fillRect(0, 0, w, h);
     for (let i = 0; i < w; i += 4) {
-      g.fillStyle = `rgba(255,255,255,${0.18 + Math.random() * 0.1})`; g.fillRect(i, 0, 1.5, h);
-      g.fillStyle = `rgba(0,0,0,${0.18 + Math.random() * 0.1})`; g.fillRect(0, i, w, 1.5);
+      g.fillStyle = `rgba(255,255,255,${0.18 + secureRandom() * 0.1})`; g.fillRect(i, 0, 1.5, h);
+      g.fillStyle = `rgba(0,0,0,${0.18 + secureRandom() * 0.1})`; g.fillRect(0, i, w, 1.5);
     }
   }, { color: false, repeat: [6, 8] });
   return linenTex;
@@ -669,7 +669,7 @@ export class World {
       g.strokeStyle = '#5c5a55'; g.lineCap = 'round';
       // kıvrımlı gravür: spiraller ve yapraklar
       for (let n = 0; n < 26; n++) {
-        const cx = Math.random() * w, cy = Math.random() * h, r0 = rnd(18, 46), dir = Math.random() < 0.5 ? 1 : -1;
+        const cx = secureRandom() * w, cy = secureRandom() * h, r0 = rnd(18, 46), dir = secureRandom() < 0.5 ? 1 : -1;
         g.lineWidth = rnd(1.6, 2.6); g.beginPath();
         for (let a = 0; a < Math.PI * 3.2; a += 0.08) {
           const r = r0 * (1 - a / (Math.PI * 3.6));
@@ -688,7 +688,7 @@ export class World {
     const walnut = canvasTex(512, 512, (g, w, h) => {
       g.fillStyle = '#4a2410'; g.fillRect(0, 0, w, h);
       for (let i = 0; i < 160; i++) {
-        const y = Math.random() * h; g.strokeStyle = `rgba(${rnd(20, 70)},${rnd(8, 25)},0,${rnd(0.15, 0.5)})`; g.lineWidth = rnd(0.6, 3);
+        const y = secureRandom() * h; g.strokeStyle = `rgba(${rnd(20, 70)},${rnd(8, 25)},0,${rnd(0.15, 0.5)})`; g.lineWidth = rnd(0.6, 3);
         g.beginPath(); g.moveTo(0, y); for (let x = 0; x <= w; x += 16) g.lineTo(x, y + Math.sin(x * 0.02 + i) * 6); g.stroke();
       }
       // baklava kesim (checkering)
@@ -889,7 +889,7 @@ export class World {
     const n = 500, pos = new Float32Array(n * 3);
     for (let i = 0; i < n; i++) {
       const y = rnd(0.82, 1.95), r = ((1.95 - y) * 0.45 + 0.06) * 0.9;
-      const a = rnd(0, 7), d = Math.sqrt(Math.random()) * r;
+      const a = rnd(0, 7), d = Math.sqrt(secureRandom()) * r;
       pos[i * 3] = Math.cos(a) * d; pos[i * 3 + 1] = y; pos[i * 3 + 2] = Math.sin(a) * d + 0.02;
     }
     const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
@@ -1054,8 +1054,8 @@ export class World {
     L.pivot.rotation.z = Math.sin(t * 0.7) * 0.035;
     L.pivot.rotation.x = Math.sin(t * 0.53 + 1) * 0.02;
     let flick = 1;
-    if (Math.random() < 0.004) this.flickT = 0.25;
-    if (this.flickT > 0) { this.flickT -= rawDt; flick = Math.random() < 0.5 ? 0.25 : 1; }
+    if (secureRandom() < 0.004) this.flickT = 0.25;
+    if (this.flickT > 0) { this.flickT -= rawDt; flick = secureRandom() < 0.5 ? 0.25 : 1; }
     L.spot.intensity = L.base * flick * (this.dim ?? 1);
     this.hemi.intensity = 0.18 * (this.dim ?? 1);
     if (this.opp) this.opp.root.traverse(l => { if (l.isLight && l.userData.base !== undefined) l.intensity = l.userData.base * (this.dim ?? 1) * flick; });
@@ -1290,7 +1290,7 @@ export class World {
   // silindir her hazne geçtiğinde onTick çağrılır (cırcır sesi animasyonla birebir)
   async spinDrum(onTick) {
     const r0 = this.drum.rotation.x;
-    const turns = 4 + Math.floor(Math.random() * 3);
+    const turns = 4 + secureInt(3);
     const step = Math.PI / 3;
     let last = Math.floor(r0 / step);
     await this.tween(1.7, k => {

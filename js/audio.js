@@ -30,8 +30,8 @@ const SFX = (() => {
       for (let i = 0; i < len; i++) {
         const t = i / len;
         // erken yansımalar + geç kuyruk
-        const early = i < A.sampleRate * 0.06 && Math.random() < 0.004 ? (Math.random() * 2 - 1) * 0.9 : 0;
-        d[i] = early + (Math.random() * 2 - 1) * Math.pow(1 - t, decay) * 0.5;
+        const early = i < A.sampleRate * 0.06 && secureRandom() < 0.004 ? (secureRandom() * 2 - 1) * 0.9 : 0;
+        d[i] = early + (secureRandom() * 2 - 1) * Math.pow(1 - t, decay) * 0.5;
       }
     }
     return b;
@@ -44,7 +44,7 @@ const SFX = (() => {
     const len = Math.max(1, Math.floor(A.sampleRate * sec));
     const b = A.createBuffer(1, len, A.sampleRate);
     const d = b.getChannelData(0);
-    for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    for (let i = 0; i < len; i++) d[i] = secureRandom() * 2 - 1;
     return b;
   }
   // zarflı gürültü vuruşu
@@ -84,7 +84,7 @@ const SFX = (() => {
     // kahverengi gürültü (havalandırma)
     const len = A.sampleRate * 4, b = A.createBuffer(1, len, A.sampleRate), d = b.getChannelData(0);
     let last = 0;
-    for (let i = 0; i < len; i++) { last = (last + 0.02 * (Math.random() * 2 - 1)) / 1.02; d[i] = last * 3.5; }
+    for (let i = 0; i < len; i++) { last = (last + 0.02 * (secureRandom() * 2 - 1)) / 1.02; d[i] = last * 3.5; }
     const room = A.createBufferSource(); room.buffer = b; room.loop = true;
     const rf = A.createBiquadFilter(); rf.type = 'lowpass'; rf.frequency.value = 320;
     const rg = A.createGain(); rg.gain.value = 0.22;
@@ -113,9 +113,9 @@ const SFX = (() => {
     // ara sıra uzaktan damla / gıcırtı
     const drip = () => {
       if (!ambStarted) return;
-      if (Math.random() < 0.6) tone({ f: 1400 + Math.random() * 900, f2: 700, dur: 0.12, vol: 0.02, verbAmt: 2.5 });
+      if (secureRandom() < 0.6) tone({ f: 1400 + secureRandom() * 900, f2: 700, dur: 0.12, vol: 0.02, verbAmt: 2.5 });
       else hit({ dur: 0.6, vol: 0.015, type: 'bandpass', f: 300, f2: 500, q: 8, attack: 0.2, verbAmt: 2 });
-      setTimeout(drip, 4000 + Math.random() * 9000);
+      setTimeout(drip, 4000 + secureRandom() * 9000);
     };
     setTimeout(drip, 3000);
   }
@@ -132,7 +132,7 @@ const SFX = (() => {
     },
     flip() { hit({ dur: 0.07, vol: 0.3, type: 'bandpass', f: 1600, f2: 3200, q: 2, verbAmt: 0.3 }); },
     chip() {
-      for (let i = 0; i < 3; i++) tone({ t: i * 0.045, f: 3200 + Math.random() * 900, dur: 0.05, vol: 0.06, type: 'triangle', verbAmt: 0.5 });
+      for (let i = 0; i < 3; i++) tone({ t: i * 0.045, f: 3200 + secureRandom() * 900, dur: 0.05, vol: 0.06, type: 'triangle', verbAmt: 0.5 });
       hit({ dur: 0.04, vol: 0.2, type: 'highpass', f: 4000 });
     },
     slide() { hit({ dur: 0.45, vol: 0.12, type: 'bandpass', f: 600, f2: 300, q: 0.8, attack: 0.05, curve: 2, verbAmt: 0.4 }); },
@@ -155,7 +155,7 @@ const SFX = (() => {
     },
     tick() { // silindirin tek hazne atlaması (cırcır)
       hit({ dur: 0.018, vol: 0.45, type: 'highpass', f: 3600, verbAmt: 0.3 });
-      tone({ f: 2500 + Math.random() * 300, dur: 0.012, vol: 0.035, type: 'square', verbAmt: 0.2 });
+      tone({ f: 2500 + secureRandom() * 300, dur: 0.012, vol: 0.035, type: 'square', verbAmt: 0.2 });
     },
     cockHalf() { hit({ dur: 0.03, vol: 0.6, type: 'highpass', f: 3000, verbAmt: 0.5 }); tone({ f: 1800, dur: 0.03, vol: 0.06, type: 'square' }); },
     cockLock() { hit({ dur: 0.04, vol: 0.95, type: 'bandpass', f: 2200, q: 2, verbAmt: 0.7 }); tone({ f: 1200, dur: 0.05, vol: 0.08, type: 'square' }); hit({ dur: 0.08, vol: 0.25, type: 'lowpass', f: 400 }); },
@@ -210,11 +210,11 @@ const SFX = (() => {
       hit({ dur: 0.4, vol: 1.0, type: 'lowpass', f: 180, attack: 0.005, verbAmt: 1.5 });
       hit({ t: 0.05, dur: 0.2, vol: 0.3, type: 'bandpass', f: 700, q: 1, verbAmt: 1.2 });
     },
-    flicker() { for (let i = 0; i < 4; i++) hit({ t: i * 0.07, dur: 0.03, vol: 0.12, type: 'bandpass', f: 3000 + Math.random() * 2000, q: 4 }); },
+    flicker() { for (let i = 0; i < 4; i++) hit({ t: i * 0.07, dur: 0.03, vol: 0.12, type: 'bandpass', f: 3000 + secureRandom() * 2000, q: 4 }); },
     knock() { hit({ dur: 0.06, vol: 0.7, type: 'lowpass', f: 420, attack: 0.002, verbAmt: 0.6 }); hit({ dur: 0.03, vol: 0.2, type: 'bandpass', f: 1500, q: 2 }); },
     lift() { hit({ dur: 0.2, vol: 0.15, type: 'bandpass', f: 2600, f2: 1800, q: 4, verbAmt: 0.5 }); tone({ f: 1400, f2: 1300, dur: 0.3, vol: 0.02, type: 'triangle' }); },
     shuffle() { // kartların karıştırılması (riffle)
-      for (let i = 0; i < 40; i++) hit({ t: 0.2 + i * 0.022 + Math.random() * 0.01, dur: 0.02, vol: 0.25, type: 'highpass', f: 2600 + Math.random() * 1500, verbAmt: 0.3 });
+      for (let i = 0; i < 40; i++) hit({ t: 0.2 + i * 0.022 + secureRandom() * 0.01, dur: 0.02, vol: 0.25, type: 'highpass', f: 2600 + secureRandom() * 1500, verbAmt: 0.3 });
       hit({ t: 1.15, dur: 0.12, vol: 0.4, type: 'bandpass', f: 900, q: 1, verbAmt: 0.5 });
     },
     drag() { // karanlıkta bir şey sürüklenir
@@ -230,20 +230,20 @@ const SFX = (() => {
       if (!A || !on) return;
       let t = 0;
       for (let i = 0; i < Math.min(14, words * 2); i++) {
-        const dur = 0.07 + Math.random() * 0.12;
+        const dur = 0.07 + secureRandom() * 0.12;
         const now = A.currentTime + t;
         const o = A.createOscillator(); o.type = 'sawtooth';
-        const f0 = pitch * (0.85 + Math.random() * 0.35);
-        o.frequency.setValueAtTime(f0, now); o.frequency.linearRampToValueAtTime(f0 * (0.9 + Math.random() * 0.2), now + dur);
-        const f1 = A.createBiquadFilter(); f1.type = 'bandpass'; f1.frequency.value = 500 + Math.random() * 400; f1.Q.value = 5;
-        const f2 = A.createBiquadFilter(); f2.type = 'bandpass'; f2.frequency.value = 1200 + Math.random() * 900; f2.Q.value = 7;
+        const f0 = pitch * (0.85 + secureRandom() * 0.35);
+        o.frequency.setValueAtTime(f0, now); o.frequency.linearRampToValueAtTime(f0 * (0.9 + secureRandom() * 0.2), now + dur);
+        const f1 = A.createBiquadFilter(); f1.type = 'bandpass'; f1.frequency.value = 500 + secureRandom() * 400; f1.Q.value = 5;
+        const f2 = A.createBiquadFilter(); f2.type = 'bandpass'; f2.frequency.value = 1200 + secureRandom() * 900; f2.Q.value = 7;
         const g = A.createGain();
         g.gain.setValueAtTime(0.0001, now); g.gain.exponentialRampToValueAtTime(0.1, now + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
         o.connect(f1).connect(g); o.connect(f2).connect(g);
         const lp = A.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1800;
         out(g.connect(lp), 0.6);
         o.start(now); o.stop(now + dur + 0.02);
-        t += dur + (Math.random() < 0.25 ? 0.12 : 0.03);
+        t += dur + (secureRandom() < 0.25 ? 0.12 : 0.03);
       }
     },
     error() { tone({ f: 140, dur: 0.12, vol: 0.06, type: 'square' }); },

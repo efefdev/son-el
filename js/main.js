@@ -3,7 +3,7 @@ import { World } from './scene.js';
 
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
-const pick = a => a[Math.floor(Math.random() * a.length)];
+const pick = a => a[secureInt(a.length)];
 
 const SETTINGS = (() => {
   let s = { speed: 1, sound: true };
@@ -338,7 +338,7 @@ async function pullScene(who) {
   }
   const n = R[who].bullets;
   const loaded = new Set();
-  while (loaded.size < n) loaded.add(Math.floor(Math.random() * 6));
+  while (loaded.size < n) loaded.add(secureInt(6));
   W.setChambers(loaded);
   document.body.classList.add('pulling');
   resetLean();
@@ -386,7 +386,7 @@ async function pullScene(who) {
   await sleep(250);
   await W.cockHammer(() => SFX.cockHalf(), () => SFX.cockLock());
   await sleep(me ? 900 : 1300);
-  const k = Math.floor(Math.random() * 6);
+  const k = secureInt(6);   // tetik anında güvenli üreteçle seçilen hazne
   const dies = loaded.has(k);
   W.trembleGun(false);
   SFX.heartStop();
@@ -636,7 +636,9 @@ document.addEventListener('keydown', e => {
   else if (k === 'd') playerDouble();
 });
 
-// test ve hata ayıklama için
-window.__sonel = { get W() { return W; }, get R() { return R; }, get G() { return G; }, newRun, playerHit, playerStand, playerDouble, pullScene, showIntro };
+// test ve hata ayıklama kancası: sadece yerel geliştirmede açık.
+// Yayındaki sitede oyun durumu (deste sırası, mermiler) konsoldan erişilebilir olmasın.
+const DEV = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
+if (DEV) window.__sonel = { get W() { return W; }, get R() { return R; }, get G() { return G; }, newRun, playerHit, playerStand, playerDouble, pullScene, showIntro };
 
 boot();

@@ -1,5 +1,25 @@
 // SON EL — kurallar: deste, el değeri, rakipler ve yapay zekâ
 
+// ---- güvenli rastgelelik ----
+// Math.random tahmin edilebilir bir üreteçtir (birkaç çıktıdan iç durumu çözülebilir).
+// Oyunun bütün rastgeleliği tarayıcının kriptografik üretecinden (crypto.getRandomValues) gelir.
+const _rbuf = new Uint32Array(4096);
+let _ri = _rbuf.length;
+function secureU32() {
+  if (_ri >= _rbuf.length) { globalThis.crypto.getRandomValues(_rbuf); _ri = 0; }
+  const v = _rbuf[_ri]; _rbuf[_ri++] = 0;   // kullanılan değer bellekte bırakılmaz
+  return v;
+}
+// [0, 1) aralığında 53 bit hassasiyetli güvenli sayı
+function secureRandom() { return (secureU32() * 2097152 + (secureU32() >>> 11)) / 9007199254740992; }
+// 0..n-1 arası sapmasız güvenli tamsayı (reddetme örneklemesi)
+function secureInt(n) {
+  const lim = 4294967296 - (4294967296 % n);
+  let x;
+  do { x = secureU32(); } while (x >= lim);
+  return x % n;
+}
+
 const SUITS = ['♠', '♥', '♦', '♣'];
 const RED = { '♥': true, '♦': true };
 const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
@@ -11,8 +31,9 @@ function newShoe(decks = 2) {
   for (let d = 0; d < decks; d++) for (const suit of SUITS) for (const r of RANKS) s.push({ id: _cid++, r, s: suit });
   return shuffle(s);
 }
-function shuffle(a, rng = Math.random) {
-  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+// Fisher–Yates, güvenli ve sapmasız indekslerle
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) { const j = secureInt(i + 1); [a[i], a[j]] = [a[j], a[i]]; }
   return a;
 }
 function cardVal(c) { return c.r === 'A' ? 11 : (c.r === 'J' || c.r === 'Q' || c.r === 'K') ? 10 : +c.r; }
@@ -78,7 +99,7 @@ function basicDouble(me, up) {
 // Rakibin kararı: true = kart çek
 // me: rakibin kartları; you: oyuncunun kartları; youDone: oyuncu oynadı mı (rakip ikinci ise true)
 // shoe: kalan deste (son eleman = sıradaki kart)
-function aiWantsHit(ai, me, you, youDone, shoe, rng = Math.random) {
+function aiWantsHit(ai, me, you, youDone, shoe, rng = secureRandom) {
   const v = handValue(me), t = v.total;
   if (t >= 21) return false;
   const yt = handValue(you).total;
@@ -111,4 +132,4 @@ function aiWantsDouble(ai, me, you) {
   return false;
 }
 
-if (typeof module !== 'undefined') module.exports = { newShoe, handValue, isBlackjack, aiWantsHit, aiWantsDouble, basicHit, basicDouble, OPPONENTS, cardVal };
+if (typeof module !== 'undefined') module.exports = { secureRandom, secureInt, shuffle, newShoe, handValue, isBlackjack, aiWantsHit, aiWantsDouble, basicHit, basicDouble, OPPONENTS, cardVal };
