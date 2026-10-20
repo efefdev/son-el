@@ -1,5 +1,5 @@
 // SON EL — 3B oyun akışı: kurallar (rules.js) + dünya (scene.js) + arayüz
-import { World } from './scene.js?v=20261020110516';
+import { World } from './scene.js?v=20261020110700';
 
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
