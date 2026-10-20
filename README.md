@@ -44,7 +44,6 @@ Sonra `http://localhost:8765` adresine gidin. Kulaklıkla oynamanız önerilir.
 - `js/main.js`: oyun akışı
 - `js/audio.js`: ses motoru (dosyasız, WebAudio ile sentez)
 - `test/qa.js`: tarayıcı içi test botu
-- `eski/`: önceki sürümler (Terazi ve 2D Son El)
 
 ## Test
 
